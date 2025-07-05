@@ -33,7 +33,23 @@ struct ContentView: View {
                 // --- タスクリスト ---
                 List {
                     ForEach(items) { item in
-                        Text(item.task)
+                        HStack(spacing: 15) {
+                            // ① 完了状態を示すアイコン
+                            Image(systemName: item.isCompleted ? "checkmark.circle.fill" : "circle")
+                                .font(.title2)
+                                .foregroundColor(item.isCompleted ? .green : .primary)
+                            
+                            // ② タスク名（完了時は取り消し線）
+                            Text(item.task)
+                                .strikethrough(item.isCompleted)
+                            
+                            Spacer()
+                        }
+                        .contentShape(Rectangle()) // HStack全体をタップ可能にする
+                        .onTapGesture {
+                            // ③ タップで完了状態を切り替え
+                            toggleCompletion(for: item)
+                        }
                     }
                     .onDelete(perform: deleteItems)
                 }
@@ -55,6 +71,12 @@ struct ContentView: View {
             
             // 追加後にテキストフィールドを空にする
             newTask = ""
+        }
+    }
+
+    private func toggleCompletion(for item: Item) {
+        withAnimation {
+            item.isCompleted.toggle()
         }
     }
 
