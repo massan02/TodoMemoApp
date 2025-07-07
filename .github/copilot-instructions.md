@@ -90,3 +90,4 @@ TodoMemoApp/
 - iOS固有の機能実装のサポート
 - コードの可読性・保守性向上の提案
 - Apple の HIG に準拠した UI/UX の助言
+- conventional commits のガイドラインに沿ったコミットメッセージの提案
