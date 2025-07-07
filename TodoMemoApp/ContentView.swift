@@ -8,10 +8,19 @@
 import SwiftUI
 import SwiftData
 
+
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
+    @Query private var allItems: [Item]
 
+    private var sortedItems: [Item] {
+        allItems.sorted { first, second in
+            if first.isCompleted != second.isCompleted {
+                return !first.isCompleted // 未完了を先に
+            }
+            return first.timestamp > second.timestamp // 新しい順
+        }
+    }
     @State private var newTask: String = ""
 
     var body: some View {
@@ -32,7 +41,7 @@ struct ContentView: View {
                 
                 // --- タスクリスト ---
                 List {
-                    ForEach(items) { item in
+                    ForEach(sortedItems) { item in
                         HStack(spacing: 15) {
                             // ① 完了状態を示すアイコン
                             Image(systemName: item.isCompleted ? "checkmark.circle.fill" : "circle")
@@ -83,7 +92,7 @@ struct ContentView: View {
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
-                modelContext.delete(items[index])
+                modelContext.delete(sortedItems[index])
             }
         }
     }
