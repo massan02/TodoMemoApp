@@ -1,55 +1,171 @@
-//
-//  .gitignore
-//  TodoMemoApp
-//
-//  Created by 村崎聖仁 on 2025/07/07.
-//
+# ===================================
+# Xcode & iOS Development
+# ===================================
 
-# Xcode
+# Xcode build outputs and derived data
 build/
 DerivedData/
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Xcode user-specific files (personal settings)
 *.pbxuser
-!default.pbxuser
 *.mode1v3
-!default.mode1v3
 *.mode2v3
-!default.mode2v3
 *.perspectivev3
-!default.perspectivev3
 xcuserdata/
 *.xcscmblueprint
-
-# Xcode Shared data
-xcshareddata/WorkspaceSettings.xcsettings
-xcshareddata/xcschememanagement.plist
 *.xccheckout
+
+# Xcode project files (keep only essentials)
 *.xcodeproj/*
 !*.xcodeproj/project.pbxproj
 !*.xcodeproj/xcshareddata/
 !*.xcodeproj/xcshareddata/**/xcschemes/*.xcscheme
 
-# Breakpoints (personal debug nonsense)
+# Breakpoints and user interface state
 *.xcbkptlist
+*.xcuserstate
 
+# ===================================
 # Swift Package Manager
+# ===================================
+
+# Swift Package Manager build artifacts
 .build/
+.swiftpm/
 Packages/
-Package.resolved
+# Package.resolved - コミット推奨（依存関係の固定）
 
-# CocoaPods
-Pods/
-Podfile.lock
+# ===================================
+# SwiftData & Core Data
+# ===================================
 
-# Carthage
-Carthage/
+# SwiftData local storage files
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+*.sqlite-journal
 
-# Fastlane
+# Core Data model compiled files
+*.mom
+*.momd
+*.omo
+
+# ===================================
+# iOS App Development
+# ===================================
+
+# iOS app bundles
+*.app
+
+# iOS Simulator files
+*.playground
+
+# Provisioning profiles
+*.mobileprovision
+*.provisionprofile
+
+# Code signing certificates (keep secure!)
+*.p12
+*.cer
+
+# ===================================
+# WidgetKit & Live Activities
+# ===================================
+
+# Widget extension build outputs
+WidgetExtension.appex
+*Widget.appex
+
+# Live Activities temporary files
+*.activitykit
+
+# ===================================
+# Development Tools
+# ===================================
+
+# Fastlane (CI/CD automation)
 fastlane/report.xml
-fastlane/screenshots
-fastlane/test_output
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output/
+fastlane/README.md
 
-# Misc
-*.log
-*.tmp
-*.swp
+# SwiftLint temporary files
+.swiftlint.yml.tmp
+
+# Sourcery code generation
+*.generated.swift
+
+# ===================================
+# Testing & Documentation
+# ===================================
+
+# Xcode test results
+*.xcresult/
+timeline.xctimeline
+playground.xcworkspace
+
+# Code coverage reports
+*.profdata
+*.profraw
+
+# Documentation generation
+docs/build/
+
+# ===================================
+# System & Editor Files
+# ===================================
+
+# macOS system files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Text editor temporary files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Log files
+*.log
+*.out
+
+# Temporary files
+*.tmp
+*.temp
+.tmp/
+
+# ===================================
+# API Keys & Configuration
+# ===================================
+
+# API keys and sensitive configuration
+Config.plist
+APIKeys.swift
+Secrets.swift
+GoogleService-Info.plist
+
+# Environment-specific configuration
+.env
+.env.local
+.env.production
+
+# ===================================
+# Analytics & Crash Reporting
+# ===================================
+
+# Firebase configuration (if used)
+# GoogleService-Info.plist は通常ignore
+
+# Crashlytics symbol upload
+upload-symbols
