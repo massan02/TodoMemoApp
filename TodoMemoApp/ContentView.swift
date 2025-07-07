@@ -63,13 +63,18 @@ struct ContentView: View {
                     .onDelete(perform: deleteItems)
                 }
             }
-            .navigationTitle("ToDoリスト")
+            .navigationTitle("ToDoリスト (\(incompleteTasksCount))")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
                 }
             }
         }
+    }
+    
+    // ① 未完了タスクの数を計算するプロパティ
+    private var incompleteTasksCount: Int {
+        sortedItems.filter { !$0.isCompleted }.count
     }
 
     private func addItem() {
