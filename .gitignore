@@ -1,0 +1,55 @@
+//
+//  .gitignore
+//  TodoMemoApp
+//
+//  Created by 村崎聖仁 on 2025/07/07.
+//
+
+# Xcode
+build/
+DerivedData/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata/
+*.xcscmblueprint
+
+# Xcode Shared data
+xcshareddata/WorkspaceSettings.xcsettings
+xcshareddata/xcschememanagement.plist
+*.xccheckout
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata/
+!*.xcodeproj/xcshareddata/**/xcschemes/*.xcscheme
+
+# Breakpoints (personal debug nonsense)
+*.xcbkptlist
+
+# Swift Package Manager
+.build/
+Packages/
+Package.resolved
+
+# CocoaPods
+Pods/
+Podfile.lock
+
+# Carthage
+Carthage/
+
+# Fastlane
+fastlane/report.xml
+fastlane/screenshots
+fastlane/test_output
+
+# Misc
+*.log
+*.tmp
+*.swp
+.DS_Store
