@@ -45,26 +45,31 @@ struct ContentView: View {
                 // --- タスクリスト ---
                 List {
                     ForEach(sortedItems) { item in
-                        HStack(spacing: 15) {
-                            // ① 完了状態を示すアイコン
-                            Image(systemName: item.isCompleted ? "checkmark.circle.fill" : "circle")
-                                .font(.title2)
-                                .foregroundColor(item.isCompleted ? .green : .primary)
-                                .onTapGesture {
-                                    // アイコンタップで完了状態を切り替え
-                                    toggleCompletion(for: item)
-                                }
-                            
-                            // ② タスク名（完了時は取り消し線）
-                            Text(item.task)
-                                .strikethrough(item.isCompleted)
-                                .onTapGesture {
-                                    // テキストタップで編集シートを表示
-                                    editingItem = item
-                                    isShowingEditSheet = true
-                                }
-                            
-                            Spacer()
+                        // NavigationLinkでラップして詳細画面へ遷移
+                        NavigationLink {
+                            TaskDetailView(item: item)
+                        } label: {
+                            HStack(spacing: 15) {
+                                // ① 完了状態を示すアイコン
+                                Image(systemName: item.isCompleted ? "checkmark.circle.fill" : "circle")
+                                    .font(.title2)
+                                    .foregroundColor(item.isCompleted ? .green : .primary)
+                                    .onTapGesture {
+                                        // アイコンタップで完了状態を切り替え
+                                        toggleCompletion(for: item)
+                                    }
+                                
+                                // ② タスク名（完了時は取り消し線）
+                                Text(item.task)
+                                    .strikethrough(item.isCompleted)
+                                    .onTapGesture {
+                                        // テキストタップで編集シートを表示
+                                        editingItem = item
+                                        isShowingEditSheet = true
+                                    }
+                                
+                                Spacer()
+                            }
                         }
                     }
                     .onDelete(perform: deleteItems)
