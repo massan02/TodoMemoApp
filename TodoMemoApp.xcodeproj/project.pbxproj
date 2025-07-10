@@ -6,8 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		403B8F5A2E1BBC01004EE651 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 403B8F592E1BBBFB004EE651 /* .gitignore */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		403B8F492E184D04004EE651 /* TodoMemoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TodoMemoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		403B8F592E1BBBFB004EE651 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -32,6 +37,7 @@
 		403B8F402E184D04004EE651 = {
 			isa = PBXGroup;
 			children = (
+				403B8F592E1BBBFB004EE651 /* .gitignore */,
 				403B8F4B2E184D04004EE651 /* TodoMemoApp */,
 				403B8F4A2E184D04004EE651 /* Products */,
 			);
@@ -109,6 +115,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				403B8F5A2E1BBC01004EE651 /* .gitignore in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -22,6 +22,9 @@ struct ContentView: View {
         }
     }
     @State private var newTask: String = ""
+    // --- 編集機能のための状態変数 ---
+    @State private var editingItem: Item? = nil
+    @State private var isShowingEditSheet: Bool = false
 
     var body: some View {
         NavigationStack {
@@ -47,17 +50,21 @@ struct ContentView: View {
                             Image(systemName: item.isCompleted ? "checkmark.circle.fill" : "circle")
                                 .font(.title2)
                                 .foregroundColor(item.isCompleted ? .green : .primary)
+                                .onTapGesture {
+                                    // アイコンタップで完了状態を切り替え
+                                    toggleCompletion(for: item)
+                                }
                             
                             // ② タスク名（完了時は取り消し線）
                             Text(item.task)
                                 .strikethrough(item.isCompleted)
+                                .onTapGesture {
+                                    // テキストタップで編集シートを表示
+                                    editingItem = item
+                                    isShowingEditSheet = true
+                                }
                             
                             Spacer()
-                        }
-                        .contentShape(Rectangle()) // HStack全体をタップ可能にする
-                        .onTapGesture {
-                            // ③ タップで完了状態を切り替え
-                            toggleCompletion(for: item)
                         }
                     }
                     .onDelete(perform: deleteItems)
@@ -67,6 +74,13 @@ struct ContentView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
+                }
+            }
+            // --- 編集シートの定義 ---
+            .sheet(isPresented: $isShowingEditSheet) {
+                // isShowingEditSheetがtrueになったら表示される
+                if let editingItem {
+                    EditTaskView(item: editingItem)
                 }
             }
         }
