@@ -45,7 +45,6 @@ struct ContentView: View {
                 // --- タスクリスト ---
                 List {
                     ForEach(sortedItems) { item in
-                        // NavigationLinkでラップして詳細画面へ遷移
                         NavigationLink {
                             TaskDetailView(item: item)
                         } label: {
@@ -59,21 +58,38 @@ struct ContentView: View {
                                         toggleCompletion(for: item)
                                     }
                                 
-                                // ② タスク名（完了時は取り消し線）
-                                Text(item.task)
-                                    .strikethrough(item.isCompleted)
-                                    .onTapGesture {
-                                        // テキストタップで編集シートを表示
-                                        editingItem = item
-                                        isShowingEditSheet = true
+                                // ② タスク名とメモインジケーター
+                                VStack(alignment: .leading) {
+                                    Text(item.task)
+                                        .strikethrough(item.isCompleted)
+                                    
+                                    // メモがあればクリップアイコンを表示
+                                    if !item.memo.isEmpty {
+                                        Image(systemName: "paperclip")
+                                            .font(.caption)
+                                            .foregroundColor(.secondary)
                                     }
+                                }
+                                .onTapGesture {
+                                    // テキストタップで編集シートを表示
+                                    editingItem = item
+                                    isShowingEditSheet = true
+                                }
                                 
                                 Spacer()
                             }
                         }
+                        .listRowBackground(
+                            RoundedRectangle(cornerRadius: 10)
+                                .background(.clear)
+                                .foregroundColor(Color(UIColor.secondarySystemGroupedBackground))
+                                .padding(.vertical, 4)
+                        )
+                        .listRowSeparator(.hidden)
                     }
                     .onDelete(perform: deleteItems)
                 }
+                .listStyle(.plain)
             }
             .navigationTitle("ToDoリスト (\(incompleteTasksCount))")
             .toolbar {
