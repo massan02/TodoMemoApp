@@ -1,144 +1,58 @@
-//
-//  ContentView.swift
-//  TodoMemoApp
-//
-//  Created by 村崎聖仁 on 2025/07/05.
-//
-
+// ContentView.swift（リファクタリング後）
 import SwiftUI
 import SwiftData
 
-
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var allItems: [Item]
-
-    private var sortedItems: [Item] {
-        allItems.sorted { first, second in
-            if first.isCompleted != second.isCompleted {
-                return !first.isCompleted // 未完了を先に
-            }
-            return first.timestamp > second.timestamp // 新しい順
-        }
+    @State private var viewModel: TodoListViewModel
+    
+    init() {
+        // DIContainerを使用してViewModelを初期化
+        _viewModel = State(initialValue: DIContainer.shared.todoListViewModel)
     }
-    @State private var newTask: String = ""
-    // --- 編集機能のための状態変数 ---
-    @State private var editingItem: Item? = nil
-    @State private var isShowingEditSheet: Bool = false
-
+    
     var body: some View {
         NavigationStack {
             VStack {
-                // --- 入力フォーム ---
-                HStack {
-                    TextField("新しいタスクを入力", text: $newTask)
-                        .textFieldStyle(.roundedBorder)
-                    
-                    Button(action: addItem) {
-                        Image(systemName: "plus.circle.fill")
-                            .font(.title)
-                    }
-                    .disabled(newTask.isEmpty) // 入力が空の時はボタンを無効化
-                }
-                .padding()
+                // 入力フォーム
+                TaskInputView(
+                    newTask: $viewModel.newTask,
+                    onAddTask: viewModel.addTask
+                )
                 
-                // --- タスクリスト ---
-                List {
-                    ForEach(sortedItems) { item in
-                        NavigationLink {
-                            TaskDetailView(item: item)
-                        } label: {
-                            HStack(spacing: 15) {
-                                // ① 完了状態を示すアイコン
-                                Image(systemName: item.isCompleted ? "checkmark.circle.fill" : "circle")
-                                    .font(.title2)
-                                    .foregroundColor(item.isCompleted ? .green : .primary)
-                                    .onTapGesture {
-                                        // アイコンタップで完了状態を切り替え
-                                        toggleCompletion(for: item)
-                                    }
-                                
-                                // ② タスク名とメモインジケーター
-                                VStack(alignment: .leading) {
-                                    Text(item.task)
-                                        .strikethrough(item.isCompleted)
-                                    
-                                    // メモがあればクリップアイコンを表示
-                                    if !item.memo.isEmpty {
-                                        Image(systemName: "paperclip")
-                                            .font(.caption)
-                                            .foregroundColor(.secondary)
-                                    }
-                                }
-                                .onTapGesture {
-                                    // テキストタップで編集シートを表示
-                                    editingItem = item
-                                    isShowingEditSheet = true
-                                }
-                                
-                                Spacer()
-                            }
-                        }
-                        .listRowBackground(
-                            RoundedRectangle(cornerRadius: 10)
-                                .background(.clear)
-                                .foregroundColor(Color(UIColor.secondarySystemGroupedBackground))
-                                .padding(.vertical, 4)
-                        )
-                        .listRowSeparator(.hidden)
-                    }
-                    .onDelete(perform: deleteItems)
-                }
-                .listStyle(.plain)
+                // タスクリスト
+                TodoListView(
+                    items: viewModel.sortedItems,
+                    onToggleCompletion: viewModel.toggleCompletion,
+                    onEditTask: viewModel.showEditSheet,
+                    onDeleteItems: viewModel.deleteItems
+                )
             }
-            .navigationTitle("ToDoリスト (\(incompleteTasksCount))")
+            .navigationTitle("ToDoリスト (\(viewModel.incompleteTasksCount))")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
                 }
             }
-            // --- 編集シートの定義 ---
-            .sheet(isPresented: $isShowingEditSheet) {
-                // isShowingEditSheetがtrueになったら表示される
-                if let editingItem {
+            .sheet(isPresented: $viewModel.isShowingEditSheet) {
+                if let editingItem = viewModel.editingItem {
                     EditTaskView(item: editingItem)
                 }
             }
-        }
-    }
-    
-    // ① 未完了タスクの数を計算するプロパティ
-    private var incompleteTasksCount: Int {
-        sortedItems.filter { !$0.isCompleted }.count
-    }
-
-    private func addItem() {
-        guard !newTask.isEmpty else { return }
-        withAnimation {
-            let newItem = Item(task: newTask)
-            modelContext.insert(newItem)
-            
-            // 追加後にテキストフィールドを空にする
-            newTask = ""
-        }
-    }
-
-    private func toggleCompletion(for item: Item) {
-        withAnimation {
-            item.isCompleted.toggle()
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(sortedItems[index])
+            .alert("エラー", isPresented: $viewModel.showError) {
+                Button("OK") { }
+            } message: {
+                Text(viewModel.errorMessage ?? "")
             }
+        }
+        .onAppear {
+            // DIContainerにModelContextを設定
+            DIContainer.shared.configure(modelContext: modelContext)
         }
     }
 }
 
-#Preview {
+#Preview("テストデータ付き") {
     ContentView()
         .modelContainer(for: Item.self, inMemory: true)
 }

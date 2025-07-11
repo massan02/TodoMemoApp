@@ -2,7 +2,7 @@
 //  TodoMemoAppApp.swift
 //  TodoMemoApp
 //
-//  Created by 村崎聖仁 on 2025/07/05.
+
 //
 
 import SwiftUI
