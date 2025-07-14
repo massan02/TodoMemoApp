@@ -17,9 +17,5 @@ class DIContainer {
         }
         return TodoRepository(modelContext: modelContext)
     }()
-    
-    lazy var todoListViewModel: TodoListViewModel = {
-        TodoListViewModel(repository: todoRepository)
-    }()
 
 }

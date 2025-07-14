@@ -6,9 +6,9 @@ struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var viewModel: TodoListViewModel
     
-    init() {
-        // DIContainerを使用してViewModelを初期化
-        _viewModel = State(initialValue: DIContainer.shared.todoListViewModel)
+    init(modelContext: ModelContext) {
+        let repository = TodoRepository(modelContext: modelContext)
+        _viewModel = State(wrappedValue: TodoListViewModel(repository: repository))
     }
     
     var body: some View {
@@ -45,14 +45,15 @@ struct ContentView: View {
                 Text(viewModel.errorMessage ?? "")
             }
         }
-        .onAppear {
-            // DIContainerにModelContextを設定
-            DIContainer.shared.configure(modelContext: modelContext)
-        }
+        
     }
 }
 
 #Preview("テストデータ付き") {
-    ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
+    ContentView(modelContext: previewContainer.mainContext)
 }
+
+private var previewContainer: ModelContainer = {
+    let config = ModelConfiguration(isStoredInMemoryOnly: true)
+    return try! ModelContainer(for: Item.self, configurations: config)
+}()
