@@ -1,0 +1,29 @@
+{
+  "configurations" : [
+    {
+      "id" : "975E14D7-D576-4E13-8EC5-C6834EBFA0DC",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:TodoMemoApp.xcodeproj",
+      "identifier" : "403B8F482E184D04004EE651",
+      "name" : "TodoMemoApp"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:TodoMemoApp.xcodeproj",
+        "identifier" : "40BF6B2E2E25E5BD00068A04",
+        "name" : "TodoMemoAppTests"
+      }
+    }
+  ],
+  "version" : 1
+}
