@@ -33,9 +33,11 @@ class TodoListViewModel {
         items.filter { !$0.isCompleted }.count
     }
     
-    init(repository: TodoRepositoryProtocol) {
+    init(repository: TodoRepositoryProtocol, autoLoad: Bool = true) {
         self.repository = repository
-        loadItems()
+        if autoLoad {
+            loadItems()
+        }
     }
     
     func addTask() {
@@ -48,6 +50,7 @@ class TodoListViewModel {
         
         do {
             try repository.save(item)
+            clearError() // エラー状態をクリア
             newTask = "" // 入力フィールドをクリア
             loadItems() // タスクリストを更新
         } catch {
@@ -60,6 +63,7 @@ class TodoListViewModel {
         
         do {
             try repository.update(item)
+            clearError() // エラー状態をクリア
             loadItems() // タスクリストを更新
         } catch {
             showErrorMessage("タスクの更新に失敗しました")
@@ -73,6 +77,7 @@ class TodoListViewModel {
             for item in itemsToDelete {
                 try repository.delete(item)
             }
+            clearError() // エラー状態をクリア
             loadItems() // タスクリストを更新
         } catch {
             showErrorMessage("タスクの削除に失敗しました")
@@ -84,9 +89,10 @@ class TodoListViewModel {
         isShowingEditSheet = true
     }
     
-    private func loadItems() {
+    func loadItems() {
         do {
             items = try repository.fetchAll()
+            clearError() // エラー状態をクリア
         } catch {
             showErrorMessage("タスクの読み込みに失敗しました")
         }
@@ -95,6 +101,11 @@ class TodoListViewModel {
     private func showErrorMessage(_ message: String) {
         errorMessage = message
         showError = true
+    }
+    
+    private func clearError() {
+        errorMessage = nil
+        showError = false
     }
 
 }
