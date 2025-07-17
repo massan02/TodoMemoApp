@@ -8,7 +8,7 @@ struct ContentView: View {
     
     init(modelContext: ModelContext) {
         let repository = TodoRepository(modelContext: modelContext)
-        _viewModel = State(wrappedValue: TodoListViewModel(repository: repository))
+        _viewModel = State(wrappedValue: TodoListViewModel(repository: repository, autoLoad: true))
     }
     
     var body: some View {
